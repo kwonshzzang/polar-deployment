@@ -1,0 +1,33 @@
+# 도커 컴포즈 구문 버전
+version: "3.8"
+# 실행할 모든 컨테이너를 나열하는 섹션
+services:
+# catalog-service 컨테이너를 기술하는 섹션
+  catalog-service:
+#   카탈로그 서비스는 PostgreSQL 데이터베이스 이후에 시작해야 한다.
+    depends_on:
+      - polar-postgres
+#   컨테이너를 실행하는데 사용할 이미지
+    image: "catalog-service"
+#   컨테이너 이름
+    container_name: "catalog-service"
+#   포트 매핑 목록을 위한 섹션
+    ports:
+      - 9001:9001
+#   환경 변수를 나열하는 섹션
+    environment:
+#       메모리 계산을 위한 스레드의 수를 설정하는 패키토 빌드팩 환경변수
+      - BPL_JVM_THREAD_COUNT=50
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://polar-postgres:5432/polardb_catalog
+#       'testdata' 프로파일을 활성화
+      - SPRING_PROFILES_ACTIVE=testdata
+# polar-postgres 컨테이너를 기술하는 섹션
+  polar-postgres:
+    image: "postgres"
+    container_name: "polar-postgres"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=polardb_catalog
