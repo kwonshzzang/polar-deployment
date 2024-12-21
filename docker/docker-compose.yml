@@ -7,6 +7,7 @@ services:
 #   카탈로그 서비스는 PostgreSQL 데이터베이스 이후에 시작해야 한다.
     depends_on:
       - polar-postgres
+      - config-service
 #   컨테이너를 실행하는데 사용할 이미지
     image: "catalog-service"
 #   컨테이너 이름
@@ -29,6 +30,12 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
 #       'testdata' 프로파일을 활성화
       - SPRING_PROFILES_ACTIVE=testdata
+# config-service 컨테이너를 기술하는 섹션
+  config-service:
+    image: "config-service"
+    container_name: "config-service"
+    ports:
+      - 8888:8888
 # polar-postgres 컨테이너를 기술하는 섹션
   polar-postgres:
     image: "postgres"
