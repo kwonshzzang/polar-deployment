@@ -45,4 +45,8 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=polardb_catalog
+#      - POSTGRES_DB=polardb_catalog
+#  POSTGRES_DB 환경변수에 대해 더 이상 값이 정의되지 않는다.
+    volumes:
+      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+#  초기화 SQL 스크립트를 컨테이너 볼륨으로 마운트한다.
