@@ -7,7 +7,6 @@ services:
 #   카탈로그 서비스는 PostgreSQL 데이터베이스 이후에 시작해야 한다.
     depends_on:
       - polar-postgres
-      - config-service
 #   컨테이너를 실행하는데 사용할 이미지
     image: "catalog-service"
 #   컨테이너 이름
@@ -30,12 +29,35 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
 #       'testdata' 프로파일을 활성화
       - SPRING_PROFILES_ACTIVE=testdata
+# order-service 컨테이너를 기술하는 섹션
+  order-service:
+    depends_on:
+      - polar-postgres
+    image: "order-service"
+    container_name: "order-service"
+    ports:
+      - 9002:9002
+      - 8002:8002
+    environment:
+      - BPL_DEBUG_ENABLE=true
+      - BPL_DEBUG_PORT=8002
+      - POLAR_CATALOG_SERVICE_URI=http://catalog-service:9001
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+      - SPRING_R2DBC_URL=r2dbc:postgresql://polar-postgres:5432/polardb_order
+      - SPRING_FLYWAY_URL=jdbc:postgresql://polar-postgres:5432/polardb_order
+
 # config-service 컨테이너를 기술하는 섹션
   config-service:
     image: "config-service"
     container_name: "config-service"
     ports:
       - 8888:8888
+      - 9888:9888
+    environment:
+      - BPL_JVM_THREAD_COUNT=50
+      - BPL_DEBUG_ENABLE=true
+      - BPL_DEBUG_PORT=9888
+
 # polar-postgres 컨테이너를 기술하는 섹션
   polar-postgres:
     image: "postgres"
