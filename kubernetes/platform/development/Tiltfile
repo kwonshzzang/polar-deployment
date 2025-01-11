@@ -1,0 +1,5 @@
+# 배포
+k8s_yaml(['services/postgresql.yml'])
+
+# 관리
+k8s_resource('polar-postgres', port_forwards=['5432'])

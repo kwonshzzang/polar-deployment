@@ -1,0 +1,6 @@
+include('/Users/kwonshzzang/Dev/polar-deployment/kubernetes/platform/development/Tiltfile')
+include('/Users/kwonshzzang/Dev/catalog-service/Tiltfile')
+include('/Users/kwonshzzang/Dev/order-service/Tiltfile')
+include('/Users/kwonshzzang/Dev/config-service/Tiltfile')
+
+update_settings(max_parallel_updates=1)
